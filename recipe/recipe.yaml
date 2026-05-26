@@ -15,8 +15,6 @@ context:
     $(python -c "print(__import__('site').getsitepackages()[-1])")/pyrudof
   win_sp_dir: |-
     Lib\site-packages\pyrudof
-  sp_dir: |-
-    ${{ "%PREFIX%\\" ~ win_sp_dir if win else unix_sp_dir }}
 
 recipe:
   name: rudof-split
@@ -145,7 +143,7 @@ outputs:
           - pytest -vv --tb=long --color=yes
           - if: is_abi3
             then:
-              - cd "${{ sp_dir }}"
+              - cd "${{ "%PREFIX%\\" ~ win_sp_dir if win else unix_sp_dir }}"
               - abi3audit -s -v --assume-minimum-abi3 ${{ python_min }} pyrudof.${{ abi3_ext }}
     about:
       homepage: https://pypi.org/project/pyrudof

@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: "0.3.3"
+  version: "0.3.4"
   maturin_min: "1"
   maturin_max: "2"
   python_check_max: "3.14"
@@ -22,7 +22,7 @@ recipe:
 
 source:
   url: https://github.com/rudof-project/rudof/archive/refs/tags/${{ version }}.tar.gz
-  sha256: a5bf29594696947063370e2c358ec2a8adc742f25d1864bfb515f10452e2d918
+  sha256: 08424ede590f01df3d226316387bf23260d6c38f1566a588c8d3251cdb284789
 
 build:
   number: 0

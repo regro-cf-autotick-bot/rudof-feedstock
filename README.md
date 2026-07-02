@@ -13,7 +13,7 @@ Package license: Apache-2.0 OR MIT
 
 Summary: Python bindings for Rudof, RDF data shapes implementation in Rust
 
-Development: https://github.com/rudof-project/rudof/tree/master/python
+Development: https://github.com/rudof-project/rudof/tree/master/bindings/python
 
 About rudof
 -----------

@@ -8,7 +8,6 @@ context:
   python_check_max: "3.14"
   # posix-ish stuff
   grep_version: ${{ "grep -iE" if unix else "findstr /r /c /i" }} "${{ version | replace('.', '\\.') }}"
-  export: ${{ "export" if unix else "set" }}
   # abi3audit
   abi3_ext: ${{ "pyd" if win else "abi3.so" }}
   unix_sp_dir: $(python -c "print(__import__('site').getsitepackages()[-1])")/pyrudof
@@ -37,14 +36,18 @@ outputs:
           OPENSSL_DIR: ${{ '$PREFIX' if unix else '%LIBRARY_PREFIX%' }}
         content:
           - cd rudof_cli
-          - cargo auditable install --no-track --locked --path=. --profile=release "--root=${{ PREFIX }}"
+          - cargo install --no-track --locked --path=. --profile=release "--root=${{ PREFIX }}"
           - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
     requirements:
       build:
         - ${{ compiler("c") }}
         - ${{ compiler("rust") }}
         - ${{ stdlib("c") }}
-        - cargo-auditable
+        # fails with:
+        #   thread 'main' (12097) panicked at cargo-auditable/src/collect_audit_data.rs:96:9:
+        #   cargo metadata failure: error: cannot update the lock file $SRC_DIR/Cargo.lock because --locked was passed to prevent this
+        #   help: to generate the lock file without accessing the network, remove the --locked flag and use --offline instead.
+        # - cargo-auditable
         - cargo-bundle-licenses
         - make
         - pkg-config
@@ -144,7 +147,7 @@ outputs:
             - rudof_lib/src/default_config.toml
         script:
           - python -c "print(__import__('pyrudof').__version__)" | ${{ grep_version }}
-          - cd python
+          - cd bindings/python
           - pytest -vv --tb=long --color=yes
           - if: is_abi3
             then:
